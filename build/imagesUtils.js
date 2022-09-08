@@ -35,24 +35,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var supertest_1 = __importDefault(require("supertest"));
-var index_1 = __importDefault(require("../index"));
-var request = (0, supertest_1.default)(index_1.default);
-describe('Test endpoint responses', function () {
-    it('get / endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
+exports.getFull = exports.createThumb = exports.getThumb = exports.thumbExists = void 0;
+var fs = require('fs');
+var path = require('path');
+var thumbPath = '../assets/thumb/';
+var fullPath = 'assets/full/';
+function thumbExists(image) {
+    return __awaiter(this, void 0, void 0, function () {
+        var doesExist;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/')];
+                case 0:
+                    doesExist = false;
+                    return [4 /*yield*/, fs.exists(fullPath + image.filename + '.jpg', function (exists) {
+                            console.log('opened!');
+                            if (exists)
+                                doesExist = true;
+                        })];
                 case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(200);
-                    return [2 /*return*/];
+                    _a.sent();
+                    // await fs.open(fullPath + image.filename + '.jpg', 'r', function(err: Error, f: number){
+                    //     if (err) {
+                    //         return console.error(err);
+                    //      }
+                    //     console.log('opened!');
+                    //     exists = true
+                    //     return true
+                    // })
+                    // // Check if filename exists in full folder
+                    // const fullImage: Stats | null = await fs.stat(fullPath + image.filename + '.jpg').catch(() => {
+                    //     return false;
+                    // });
+                    // const exists : boolean = fs.existsSync(fullPath + image.filename + '.jpg')
+                    // console.log(fullPath + image.filename)
+                    return [2 /*return*/, doesExist];
             }
         });
-    }); });
-});
+    });
+}
+exports.thumbExists = thumbExists;
+function getThumb(image) {
+    return '';
+}
+exports.getThumb = getThumb;
+function createThumb(image) {
+}
+exports.createThumb = createThumb;
+function getFull(image) {
+}
+exports.getFull = getFull;

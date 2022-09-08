@@ -40,17 +40,71 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
-var index_1 = __importDefault(require("../index"));
+var promises_1 = __importDefault(require("fs/promises"));
+var path_1 = __importDefault(require("path"));
+var index_1 = __importDefault(require("../../index"));
 var request = (0, supertest_1.default)(index_1.default);
-describe('Test endpoint responses', function () {
-    it('get / endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
+describe('GET /api/images', function () {
+    it('responds with 400 if called without parameters', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/')];
+                case 0: return [4 /*yield*/, request.get('/api/images')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(400);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('responds with 400 if called with a missing parameter', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/api/images?filename=test&height=100')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(400);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('responds with 404 if called correctly but image does not exist', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/api/images?filename=test&height=100&width=100')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(404);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('responds with 200 if called correctly and image exist', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/api/images?filename=encenadaport&height=100&width=100')];
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('created a thumb version of the image', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/api/images?filename=encenadaport&height=100&width=100')
+                        .then(function () {
+                        promises_1.default.stat(path_1.default.resolve(__dirname, '../../../assets/thumb/encenadaport-100x100.jpg')).then(function (fileStat) {
+                            return expect(fileStat).not.toBeNull();
+                        });
+                    })];
+                case 1:
+                    response = _a.sent();
                     return [2 /*return*/];
             }
         });
