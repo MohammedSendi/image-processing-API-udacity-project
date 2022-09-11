@@ -39,38 +39,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
+var path_1 = __importDefault(require("path"));
+var image_size_1 = __importDefault(require("image-size"));
 var imageProcessing_1 = require("../../utils/imageProcessing");
-var images = express_1.default.Router();
-images.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var image, buffer;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                image = {
-                    filename: req.query.filename,
-                    width: parseInt(req.query.width),
-                    height: parseInt(req.query.height)
-                };
-                // check if the query is correct
-                if (!image.filename || !image.height || !image.width) {
-                    console.error('Please provide correct filename, height and width params');
-                    res
-                        .status(400)
-                        .send('Please provide correct filename, height and width params');
-                    return [2 /*return*/];
-                }
-                return [4 /*yield*/, (0, imageProcessing_1.createThumbnail)(image.filename, image.height, image.width)
-                        .then(function (buffer) {
-                        res.status(200).contentType('jpg').send(buffer);
-                    })
-                        .catch(function (error) {
-                        res.status(error.status).send(error.message);
+describe('Image Processing', function () {
+    it('created a thumb version of the image with the correct height and width', function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, imageProcessing_1.createThumbnail)('encenadaport', 50, 50).then(function () {
+                        var dimensions = (0, image_size_1.default)(path_1.default.resolve(__dirname, '../../../assets/thumb/encenadaport-50x50.jpg'));
+                        expect(dimensions.height).toEqual(50);
+                        expect(dimensions.width).toEqual(50);
                     })];
-            case 1:
-                buffer = _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); });
-exports.default = images;
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('returns 404 message when files does not exist', function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, imageProcessing_1.createThumbnail)('randomName', 50, 50).catch(function (error) {
+                        expect(error.status).toBe(404);
+                    })];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});

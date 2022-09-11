@@ -43,18 +43,4 @@ describe('GET /api/images', () => {
         ).then((fileStat: Stats) => expect(fileStat).not.toBeNull());
       });
   });
-  it('created a thumb version of the image with the correct height and width', async () => {
-    await request
-      .get('/api/images?filename=encenadaport&height=200&width=150')
-      .then(() => {
-        const dimensions = sizeOf(
-          path.resolve(
-            __dirname,
-            '../../../assets/thumb/encenadaport-200x150.jpg'
-          )
-        );
-        expect(dimensions.height).toEqual(200);
-        expect(dimensions.width).toEqual(150);
-      });
-  });
 });
