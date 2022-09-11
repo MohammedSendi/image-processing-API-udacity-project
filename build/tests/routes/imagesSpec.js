@@ -43,6 +43,7 @@ var supertest_1 = __importDefault(require("supertest"));
 var promises_1 = __importDefault(require("fs/promises"));
 var path_1 = __importDefault(require("path"));
 var index_1 = __importDefault(require("../../index"));
+var image_size_1 = __importDefault(require("image-size"));
 var request = (0, supertest_1.default)(index_1.default);
 describe('GET /api/images', function () {
     it('responds with 400 if called without parameters', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -94,17 +95,31 @@ describe('GET /api/images', function () {
         });
     }); });
     it('created a thumb version of the image', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images?filename=encenadaport&height=100&width=100')
+                case 0: return [4 /*yield*/, request
+                        .get('/api/images?filename=encenadaport&height=100&width=100')
                         .then(function () {
-                        promises_1.default.stat(path_1.default.resolve(__dirname, '../../../assets/thumb/encenadaport-100x100.jpg')).then(function (fileStat) {
-                            return expect(fileStat).not.toBeNull();
-                        });
+                        promises_1.default.stat(path_1.default.resolve(__dirname, '../../../assets/thumb/encenadaport-100x100.jpg')).then(function (fileStat) { return expect(fileStat).not.toBeNull(); });
                     })];
                 case 1:
-                    response = _a.sent();
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('created a thumb version of the image with the correct height and width', function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request
+                        .get('/api/images?filename=encenadaport&height=200&width=150')
+                        .then(function () {
+                        var dimensions = (0, image_size_1.default)(path_1.default.resolve(__dirname, '../../../assets/thumb/encenadaport-200x150.jpg'));
+                        expect(dimensions.height).toEqual(200);
+                        expect(dimensions.width).toEqual(150);
+                    })];
+                case 1:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });

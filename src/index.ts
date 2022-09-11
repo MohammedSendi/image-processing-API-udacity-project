@@ -3,7 +3,7 @@ import routes from './routes';
 import express, { Request, Response } from 'express';
 
 const app: express.Application = express();
-const port: number = 3000; // Default port
+const port = 3000; // Default port
 
 // Add routes
 app.use('/api', routes);

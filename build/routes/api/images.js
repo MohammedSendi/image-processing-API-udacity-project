@@ -51,11 +51,13 @@ images.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 image = {
                     filename: req.query.filename,
                     width: parseInt(req.query.width),
-                    height: parseInt(req.query.height)
+                    height: parseInt(req.query.height),
                 };
                 // check if the query is correct
                 if (!image.filename || !image.height || !image.width) {
-                    res.status(400).send('Please provide correct filename, height and width params');
+                    res
+                        .status(400)
+                        .send('Please provide correct filename, height and width params');
                     return [2 /*return*/];
                 }
                 thumbPath = "assets/thumb/".concat(image.filename, "-").concat(image.height, "x").concat(image.width, ".jpg");
@@ -95,8 +97,7 @@ images.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 //save new image
                 promises_1.default.writeFile(thumbPath, imageBuffer_1)
                     .then(function () {
-                    promises_1.default.readFile(thumbPath)
-                        .then(function (thumbData) {
+                    promises_1.default.readFile(thumbPath).then(function (thumbData) {
                         res.status(200).contentType('jpg').send(thumbData);
                     });
                     return imageBuffer_1;
